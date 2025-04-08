@@ -1,4 +1,4 @@
-// Your web app's Firebase configuration
+// Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyDw30UTh3QzwvHOjyFZuKfc3_xQMoFfTxU",
   authDomain: "blog-content-likes.firebaseapp.com",
@@ -18,13 +18,14 @@ const likeRef = db.ref("likes/blog-like-button");
 const button = document.getElementById("like-button");
 const countEl = document.getElementById("like-count");
 
-// Read current like count
-likeRef.on("value", (snapshot) => {
-  const count = snapshot.val() || 0;
-  countEl.textContent = count;
-});
+// Check if user has already liked
+const hasLiked = localStorage.getItem("has-liked-blog") === "true";
 
-// Increment on click
-button.addEventListener("click", () => {
-  likeRef.transaction((current) => (current || 0) + 1);
-});
+// Disable the button and update label if already liked
+if (hasLiked) {
+  button.disabled = true;
+  button.textContent = "❤️ Liked (";
+}
+
+// Load the like count
+likeRef.on("value", (snapshot) => {
