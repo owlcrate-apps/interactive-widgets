@@ -45,5 +45,5 @@ button.addEventListener("click", () => {
 
   // Update UI
   button.disabled = true;
-  button.textContent = "❤️ Liked (";
+  button.textContent = "❤️ Liked";
 });
