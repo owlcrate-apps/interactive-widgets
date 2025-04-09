@@ -9,7 +9,7 @@ let pieces = [];
 let selectedPiece = null;
 let offsetX, offsetY;
 let img = new Image();
-img.src = 'puzzle-image.jpg';
+img.src = 'puzzle-image.png';
 
 img.onload = () => {
   initPuzzle();
