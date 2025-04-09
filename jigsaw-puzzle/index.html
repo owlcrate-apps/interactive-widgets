@@ -2,14 +2,30 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Jigsaw Puzzle</title>
+  <title>OwlCrate Puzzle</title>
   <style>
-    canvas { display: block; margin: 0 auto; }
-    body { text-align: center; font-family: sans-serif; margin-top: 20px; }
+    body {
+      text-align: center;
+      font-family: sans-serif;
+      background: #f7f7f7;
+    }
+    canvas {
+      display: block;
+      margin: 20px auto;
+      border: 2px solid #ccc;
+    }
+    #win-message {
+      display: none;
+      font-size: 1.5em;
+      color: green;
+      margin-top: 20px;
+    }
   </style>
 </head>
 <body>
-  <h1>🧩 Simple Puzzle (Placeholder)</h1>
-  <p>This is a placeholder for a future jigsaw puzzle feature.</p>
+  <h1>🧩 OwlCrate Puzzle</h1>
+  <canvas id="puzzle" width="400" height="400"></canvas>
+  <div id="win-message">You did it! 🎉</div>
+  <script src="script.js"></script>
 </body>
 </html>
