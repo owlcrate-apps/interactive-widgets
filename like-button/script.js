@@ -24,7 +24,7 @@ const hasLiked = localStorage.getItem("has-liked-blog") === "true";
 // Disable the button and update label if already liked
 if (hasLiked) {
   button.disabled = true;
-  button.textContent = "❤️ Liked (";
+  button.textContent = "❤️ Liked";
 }
 
 // Load the like count
@@ -45,5 +45,5 @@ button.addEventListener("click", () => {
 
   // Update UI
   button.disabled = true;
-  button.textContent = "❤️ Liked (";
+  button.textContent = "❤️ Liked";
 });
