@@ -9,34 +9,36 @@ const firebaseConfig = {
   appId: "1:355435366561:web:ecf1d89db5a237828b08e0"
 };
 
-// Initialize Firebase
+// --- Get ID from URL ---
+const params = new URLSearchParams(window.location.search);
+const buttonID = params.get("id") || "default";
+const localStorageKey = `has-liked-${buttonID}`;
+
+// --- Firebase Init ---
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
-const likeRef = db.ref("likes/blog-like-button");
+const likeRef = db.ref(`likes/${buttonID}`);
 
+// --- Button Setup ---
 const button = document.getElementById("like-button");
-const liked = localStorage.getItem("has-liked-blog") === "true";
 
-// Update button label based on current state
-function updateButton() {
-  button.textContent = liked ? "💔 Unlike" : "❤️ Like";
+function updateButtonUI(hasLiked) {
+  button.textContent = hasLiked ? "💔 Unlike" : "❤️ Like";
 }
 
-updateButton();
+let hasLiked = localStorage.getItem(localStorageKey) === "true";
+updateButtonUI(hasLiked);
 
-// Toggle on click
 button.addEventListener("click", () => {
-  const hasLiked = localStorage.getItem("has-liked-blog") === "true";
+  hasLiked = localStorage.getItem(localStorageKey) === "true";
 
   if (hasLiked) {
-    // Unlike: decrement count
     likeRef.transaction((current) => Math.max((current || 1) - 1, 0));
-    localStorage.setItem("has-liked-blog", "false");
-    button.textContent = "❤️ Like";
+    localStorage.setItem(localStorageKey, "false");
   } else {
-    // Like: increment count
     likeRef.transaction((current) => (current || 0) + 1);
-    localStorage.setItem("has-liked-blog", "true");
-    button.textContent = "💔 Unlike";
+    localStorage.setItem(localStorageKey, "true");
   }
+
+  updateButtonUI(!hasLiked);
 });
