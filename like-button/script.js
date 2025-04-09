@@ -24,11 +24,26 @@ const hasLiked = localStorage.getItem("has-liked-blog") === "true";
 // Disable the button and update label if already liked
 if (hasLiked) {
   button.disabled = true;
-  button.textContent = "❤️ Liked";
+  button.textContent = "❤️ Liked (";
 }
 
 // Load the like count
 likeRef.on("value", (snapshot) => {
   const count = snapshot.val() || 0;
   countEl.textContent = count;
+});
+
+// Like action
+button.addEventListener("click", () => {
+  if (localStorage.getItem("has-liked-blog") === "true") return;
+
+  // Increment count in Firebase
+  likeRef.transaction((current) => (current || 0) + 1);
+
+  // Mark as liked in localStorage
+  localStorage.setItem("has-liked-blog", "true");
+
+  // Update UI
+  button.disabled = true;
+  button.textContent = "❤️ Liked (";
 });
