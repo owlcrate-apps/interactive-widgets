@@ -14,36 +14,29 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 const likeRef = db.ref("likes/blog-like-button");
 
-// DOM elements
 const button = document.getElementById("like-button");
-const countEl = document.getElementById("like-count");
+const liked = localStorage.getItem("has-liked-blog") === "true";
 
-// Check if user has already liked
-const hasLiked = localStorage.getItem("has-liked-blog") === "true";
-
-// Disable the button and update label if already liked
-if (hasLiked) {
-  button.disabled = true;
-  button.textContent = "❤️ Liked";
+// Update button label based on current state
+function updateButton() {
+  button.textContent = liked ? "💔 Unlike" : "❤️ Like";
 }
 
-// Load the like count
-likeRef.on("value", (snapshot) => {
-  const count = snapshot.val() || 0;
-  countEl.textContent = count;
-});
+updateButton();
 
-// Like action
+// Toggle on click
 button.addEventListener("click", () => {
-  if (localStorage.getItem("has-liked-blog") === "true") return;
+  const hasLiked = localStorage.getItem("has-liked-blog") === "true";
 
-  // Increment count in Firebase
-  likeRef.transaction((current) => (current || 0) + 1);
-
-  // Mark as liked in localStorage
-  localStorage.setItem("has-liked-blog", "true");
-
-  // Update UI
-  button.disabled = true;
-  button.textContent = "❤️ Liked";
+  if (hasLiked) {
+    // Unlike: decrement count
+    likeRef.transaction((current) => Math.max((current || 1) - 1, 0));
+    localStorage.setItem("has-liked-blog", "false");
+    button.textContent = "❤️ Like";
+  } else {
+    // Like: increment count
+    likeRef.transaction((current) => (current || 0) + 1);
+    localStorage.setItem("has-liked-blog", "true");
+    button.textContent = "💔 Unlike";
+  }
 });
